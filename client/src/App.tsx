@@ -1,33 +1,41 @@
 import { useState } from 'react'
 
-import viteLogo from 'public/vite.svg'
-import reactLogo from 'src/assets/react.svg'
-
 import 'src/App.css'
 
-function App() {
-  const [count, setCount] = useState(0)
+export const App = () => {
+  const emptyBlocks: string[][] = []
+  emptyBlocks.length = 8
+  emptyBlocks.fill([])
+
+  emptyBlocks.forEach((row, i) => {
+    row[i] = 'cell'
+  })
+
+  const [board, setBoard] = useState<string[][]>(emptyBlocks)
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank" rel="noreferrer">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank" rel="noreferrer">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <main>
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(8, 100px)',
+        }}
+      >
+        {board.map((row, i) => {
+          return row.map((cell, j) => {
+            return (
+              <div
+                key={`${i}${j}`}
+                style={{
+                  height: '100px',
+                  border: '1px solid grey',
+                  backgroundColor: (i + j) % 2 === 0 ? 'black' : 'white',
+                }}
+              >{`${cell}${i}${j}`}</div>
+            )
+          })
+        })}
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount(count => count + 1)}>count is {count}</button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">Click on the Vite and React logos to learn more</p>
-    </>
+    </main>
   )
 }
-
-export default App

@@ -16,11 +16,8 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "types": ["vite/client"],
-    "paths": {
-      "public/*": ["public/*"]
-    }
+    "types": ["vite/client"]
   },
-  "include": ["./src", "./public", "./.eslintrc.json", "./vite.config.ts"],
+  "include": ["./src", "./.eslintrc.json", "./vite.config.ts"],
   "exclude": ["node_modules"]
 }
