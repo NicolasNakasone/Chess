@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useContext, useEffect } from 'react'
 
 import { TestPiece } from 'src/components/Pieces'
+import { BoardContext } from 'src/contexts/BoardContext'
 
 import 'src/App.css'
 
@@ -16,19 +17,18 @@ import 'src/App.css'
   es valido (sino guiarse de la logica del juego "Chess Royale")
 */
 
-export const App = () => {
-  const emptyBlocks: (string | JSX.Element)[][] = Array(8)
-    .fill(null)
-    .map(() => Array(8).fill(''))
+/* 
+  - Hacer un context y guardar el board ahi. Basicamente esto seria para que cada vez que una pieza quiera moverse
+    lo haga seteando el state que todas las piezas compartirian.
+  - A futuro pensar en algun util o algo que genere o coloque todas las piezas en el tablero, este util se podria 
+    llamar en un useEffect inicial
+*/
 
-  const [board, setBoard] = useState<(string | JSX.Element)[][]>(emptyBlocks)
+export const App = () => {
+  const { board, handleSetPiece } = useContext(BoardContext)
 
   useEffect(() => {
-    setBoard(prev => {
-      const newBoard = [...prev]
-      newBoard[7][4] = <TestPiece />
-      return newBoard
-    })
+    handleSetPiece(<TestPiece />)
   }, [])
 
   return (
