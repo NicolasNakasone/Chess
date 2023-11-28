@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { BoardContext } from 'src/contexts/BoardContext'
+import { BoardContext, HandleSetPieceProps } from 'src/contexts/BoardContext'
 
 export const BoardProvider = ({ children }: { children: JSX.Element }): JSX.Element => {
   const emptyBlocks: (string | JSX.Element)[][] = Array(8)
@@ -9,10 +9,10 @@ export const BoardProvider = ({ children }: { children: JSX.Element }): JSX.Elem
 
   const [board, setBoard] = useState<(string | JSX.Element)[][]>(emptyBlocks)
 
-  const handleSetPiece = (piece: JSX.Element) => {
+  const handleSetPiece = ({ piece, place: { row, column } }: HandleSetPieceProps) => {
     setBoard(prev => {
       const newBoard = [...prev]
-      newBoard[7][4] = piece
+      newBoard[row][column] = piece
       return newBoard
     })
   }

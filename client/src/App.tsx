@@ -28,7 +28,7 @@ export const App = () => {
   const { board, handleSetPiece } = useContext(BoardContext)
 
   useEffect(() => {
-    handleSetPiece(<TestPiece />)
+    handleSetPiece({ piece: <TestPiece />, place: { row: 7, column: 4 } })
   }, [])
 
   return (
