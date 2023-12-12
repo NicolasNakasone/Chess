@@ -1,10 +1,33 @@
 import { useContext } from 'react'
 
-import { Pawn } from 'src/assets/svg/Pawn'
-import { BoardContext } from 'src/contexts/BoardContext'
+import { BoardContext, Position } from 'src/contexts/BoardContext'
 
-export const TestPiece = (): JSX.Element => {
-  const { handleSetPiece } = useContext(BoardContext)
+export const Pawn = (position: Position): JSX.Element => {
+  const { handleSetCell, isCellEmpty } = useContext(BoardContext)
 
-  return <Pawn />
+  const onConfirmMove = () => {
+    const isEmpty = isCellEmpty(position)
+
+    if (isEmpty) {
+      handleSetCell({})
+    }
+  }
+
+  const handlePawnMove = () => {}
+
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      version="1.1"
+      width="100"
+      height="100"
+      viewBox="0 0 100 100"
+      onClick={handlePawnMove}
+    >
+      <circle cx="50" cy="50" r="40" fill="#f0d9b5" />
+      <circle cx="50" cy="30" r="10" fill="#000" />
+      <circle cx="50" cy="30" r="6" fill="#fff" />
+      <ellipse cx="50" cy="85" rx="30" ry="12" fill="#000" />
+    </svg>
+  )
 }

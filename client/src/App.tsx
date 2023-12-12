@@ -1,6 +1,6 @@
 import { useContext, useEffect } from 'react'
 
-import { TestPiece } from 'src/components/Pieces'
+import { Pawn } from 'src/components/Pieces'
 import { BoardContext } from 'src/contexts/BoardContext'
 
 import 'src/App.css'
@@ -24,11 +24,32 @@ import 'src/App.css'
     llamar en un useEffect inicial
 */
 
+/* 
+  Cambiar la logica o lo que se guarda en cada casillero del tablero, ya que deberia ser un objeto que contenga
+  datos como el color (negro, blanco), la posicion actual (tal vez sea util guardar esto), y luego en otra prop
+  el elemento HTML
+
+  Entonces en newBoard[row][column], ahora se guardaria algo como:
+
+  {
+    color: "white" | "black",
+    position: {
+      row: number
+      column: number
+    }
+    element: JSX.Element
+  }
+*/
+
 export const App = () => {
-  const { board, handleSetPiece } = useContext(BoardContext)
+  const { board, handleSetCell } = useContext(BoardContext)
 
   useEffect(() => {
-    handleSetPiece({ piece: <TestPiece />, place: { row: 7, column: 4 } })
+    handleSetCell({
+      color: 'white',
+      element: <Pawn {...{ row: 7, column: 4 }} />,
+      position: { row: 7, column: 4 },
+    })
   }, [])
 
   return (
@@ -41,7 +62,7 @@ export const App = () => {
       >
         {board.map((row, i) => {
           return row.map((cell, j) => {
-            const cellData = typeof cell !== 'string' ? cell : `${cell}${i}${j}`
+            console.log({ row, cell, i, j })
             return (
               <div
                 key={`${i}${j}`}
@@ -51,7 +72,7 @@ export const App = () => {
                   backgroundColor: (i + j) % 2 === 0 ? '#444' : '#DDD',
                 }}
               >
-                {cellData}
+                {cell ? cell.element : `${i}${j}`}
               </div>
             )
           })
