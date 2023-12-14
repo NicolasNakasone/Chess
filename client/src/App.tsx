@@ -1,6 +1,6 @@
-import { useContext, useEffect } from 'react'
+import { useContext, useEffect, useMemo } from 'react'
 
-import { Pawn } from 'src/components/Pieces'
+import { Rook } from 'src/components/Pieces'
 import { BoardContext } from 'src/contexts/BoardContext'
 
 import 'src/App.css'
@@ -44,16 +44,17 @@ import 'src/App.css'
 export const App = () => {
   const { board, handleSetCell } = useContext(BoardContext)
 
+  // A fines de probar se setea de esta forma, mas adelante se deberia ver la manera de setear un tablero entero
   useEffect(() => {
     handleSetCell({
-      color: 'white',
-      element: <Pawn {...{ row: 7, column: 4 }} />,
+      element: <Rook {...{ row: 7, column: 4 }} />,
       position: { row: 7, column: 4 },
+      playingAs: 'white',
     })
   }, [])
 
-  return (
-    <main>
+  const Board = useMemo(() => {
+    return (
       <div
         style={{
           display: 'grid',
@@ -78,6 +79,8 @@ export const App = () => {
           })
         })}
       </div>
-    </main>
-  )
+    )
+  }, [board])
+
+  return <main>{Board}</main>
 }
