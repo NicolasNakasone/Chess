@@ -50,20 +50,27 @@ export const App = () => {
       element: <Rook {...{ row: 7, column: 4 }} />,
       position: { row: 7, column: 4 },
       playingAs: 'white',
+      pieceName: 'rook',
     })
   }, [])
 
-  const Board = useMemo(() => {
-    return (
+  // const Board = useMemo(() => {
+  //   return (
+
+  //   )
+  // }, [board])
+
+  return (
+    <main>
       <div
         style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(8, 100px)',
         }}
       >
-        {board.map((row, i) => {
-          return row.map((cell, j) => {
-            console.log({ row, cell, i, j })
+        {board.map((column, i) => {
+          return column.map((cell, j) => {
+            console.log({ column, cell, i, j })
             return (
               <div
                 key={`${i}${j}`}
@@ -79,8 +86,6 @@ export const App = () => {
           })
         })}
       </div>
-    )
-  }, [board])
-
-  return <main>{Board}</main>
+    </main>
+  )
 }

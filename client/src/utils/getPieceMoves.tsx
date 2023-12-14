@@ -1,10 +1,10 @@
 import { Board, Position } from 'src/contexts/BoardContext'
 
 /* 
-  Retornar un array con las posiciones validas para movimiento, para pintar los TemporalCell en pantalla,
+  Retornar un array con las posiciones validas para movimiento, para pintar los TemporaryCell en pantalla,
   por ej: const pawnMoves = [[6, 4]]; return pawnMoves
   Esto se utilizaria en el componente que llamo la funcion en el onConfirmMove (previo a setear el 
-  currentPiece), para tal vez en un useEffect setear el tablero con los TemporalCell validos
+  currentPiece), para tal vez en un useEffect setear el tablero con los TemporaryCell validos
 
   Consultar si es posible realizar mas de una funcion recursiva dentro de una funcion, para en una sola
   funcion inicial retornar (por ejemplo para el caso de una torre), los movimientos posibles en una direccion,
@@ -22,7 +22,7 @@ import { Board, Position } from 'src/contexts/BoardContext'
    --> getRookMoves(board, {++0, 4})
 */
 
-type ValidMoves = [number, number][]
+export type ValidMoves = [number, number][]
 
 const leftBorder = 0
 const rightBorder = 7
@@ -38,7 +38,7 @@ const checkHorizontalCells = (board: Board, { row, column }: Position): ValidMov
   let previousColumn = column - 1
   let nextColumn = column + 1
 
-  while (previousColumn >= leftBorder || nextColumn < rightBorder) {
+  while (previousColumn >= leftBorder || nextColumn <= rightBorder) {
     isCellEmpty(board, { row, column: previousColumn }) &&
       horizontalMoves.push([row, previousColumn])
     isCellEmpty(board, { row, column: nextColumn }) && horizontalMoves.push([row, nextColumn])
@@ -54,7 +54,7 @@ const checkVerticalMoves = (board: Board, { row, column }: Position): ValidMoves
   let previousRow = row - 1
   let nextRow = row + 1
 
-  while (previousRow >= leftBorder || nextRow < rightBorder) {
+  while (previousRow >= leftBorder || nextRow <= rightBorder) {
     isCellEmpty(board, { row: previousRow, column }) && verticalMoves.push([previousRow, column])
     isCellEmpty(board, { row: nextRow, column }) && verticalMoves.push([nextRow, column])
 

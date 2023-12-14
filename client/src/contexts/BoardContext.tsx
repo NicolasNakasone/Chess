@@ -1,26 +1,29 @@
 import { SetStateAction, createContext } from 'react'
 
+import { ValidMoves } from 'src/utils/getPieceMoves'
+
 export interface Position {
   row: number
   column: number
 }
 
-export interface TemporalCell {
+export interface TemporaryCell {
   element: JSX.Element
   position: Position
   piecePosition: Position
 }
 
-// type Pieces = 'king' | 'queen' | 'rook' | 'bishop' | 'knight' | 'pawn'
+export type Pieces = 'king' | 'queen' | 'rook' | 'bishop' | 'knight' | 'pawn'
 
 export interface BoardCell {
-  playingAs: 'white' | 'black' | 'temporal'
+  playingAs: 'white' | 'black' | 'temporary'
+  pieceName?: Pieces
   position: Position
   element: JSX.Element | null
 }
 
 export type Board = (null | BoardCell)[][]
-export type TemporalCells = TemporalCell[]
+export type TemporaryCells = TemporaryCell[]
 
 interface BoardContextProps {
   board: (null | BoardCell)[][]
@@ -28,10 +31,14 @@ interface BoardContextProps {
   setBoard: (value: SetStateAction<Board>) => void
   handleSetCell: (props: BoardCell) => void
   handleGetCell: (position: Position) => BoardCell | null
+  handleSetEmptyCell: ({ row, column }: Position, isMovingPiece: boolean) => void
   currentPiece: BoardCell | null
   handleCurrentPiece: (piece: BoardCell | null) => void
-  handleTemporalCells: (cells: TemporalCells) => void
+  resetCurrentPiece: () => void
+  handleTemporaryCells: (cells: TemporaryCells) => void
   isCellEmpty: (position: Position) => boolean
+  temporaryIndexes: ValidMoves
+  eraseTemporaryIndexes: () => void
 }
 
 export const BoardContext = createContext<BoardContextProps>({
@@ -39,8 +46,12 @@ export const BoardContext = createContext<BoardContextProps>({
   setBoard: () => null,
   handleSetCell: () => null,
   handleGetCell: () => null,
+  handleSetEmptyCell: () => null,
   currentPiece: null,
   handleCurrentPiece: () => null,
-  handleTemporalCells: () => null,
+  resetCurrentPiece: () => null,
+  handleTemporaryCells: () => null,
   isCellEmpty: () => false,
+  temporaryIndexes: [],
+  eraseTemporaryIndexes: () => null,
 })
