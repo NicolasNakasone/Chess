@@ -39,6 +39,7 @@ interface BoardContextProps {
   isCellEmpty: (position: Position) => boolean
   temporaryIndexes: ValidMoves
   eraseTemporaryIndexes: () => void
+  handleMovePiece: (position: Position) => void
 }
 
 export const BoardContext = createContext<BoardContextProps>({
@@ -54,4 +55,5 @@ export const BoardContext = createContext<BoardContextProps>({
   isCellEmpty: () => false,
   temporaryIndexes: [],
   eraseTemporaryIndexes: () => null,
+  handleMovePiece: () => null,
 })

@@ -1,4 +1,4 @@
-import { useContext, useEffect, useMemo } from 'react'
+import { useContext, useEffect } from 'react'
 
 import { Rook } from 'src/components/Pieces'
 import { BoardContext } from 'src/contexts/BoardContext'
@@ -78,6 +78,7 @@ export const App = () => {
                   height: '100px',
                   border: '1px solid grey',
                   backgroundColor: (i + j) % 2 === 0 ? '#444' : '#DDD',
+                  userSelect: 'none',
                 }}
               >
                 {cell ? cell.element : `${i}${j}`}

@@ -1,7 +1,7 @@
 import { useContext } from 'react'
 
 import { TemporaryCell } from 'src/components/TemporaryCell'
-import { BoardContext, Position, TemporaryCells } from 'src/contexts/BoardContext'
+import { BoardContext, Pieces, Position, TemporaryCells } from 'src/contexts/BoardContext'
 import { getPawnMoves, getRookMoves } from 'src/utils/getPieceMoves'
 
 export const King = (position: Position): JSX.Element => {
@@ -107,8 +107,6 @@ export const Pawn = (position: Position): JSX.Element => {
     </svg>
   )
 }
-
-type Pieces = 'king' | 'queen' | 'rook' | 'bishop' | 'knight' | 'pawn'
 
 type Piece = {
   [piece in Pieces]: JSX.Element
