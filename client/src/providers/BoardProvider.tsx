@@ -80,7 +80,10 @@ export const BoardProvider = ({ children }: { children: JSX.Element }): JSX.Elem
     return typeof board[row]?.[column] !== 'undefined'
   }
 
-  // Se trajo la funcion al provider para reducir los setBoard a solo uno
+  /* 
+    Se trajo la funcion al provider para reducir el uso de setBoard a solo uno, asi no
+    se tiene que recorrer toda el tablero cada vez que se use handleSetCell
+  */
   const handleMovePiece = ({ row: newRow, column: newColumn }: Position) => {
     if (currentPiece) {
       const previousRow = currentPiece.position.row
