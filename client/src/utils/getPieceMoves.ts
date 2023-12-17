@@ -1,5 +1,6 @@
 import { Board, Position } from 'src/contexts/BoardContext'
 import {
+  check8WayCells,
   checkDownwardDiagonalCells,
   checkDownwardInLCells,
   checkHorizontalCells,
@@ -32,7 +33,13 @@ import {
 
 export type ValidMoves = [number, number][]
 
-export const getQueenMoves = (board: Board, { row, column }: Position) => {
+export const getKingMoves = (board: Board, { row, column }: Position): ValidMoves => {
+  const validMoves: ValidMoves = check8WayCells(board, { row, column })
+
+  return validMoves
+}
+
+export const getQueenMoves = (board: Board, { row, column }: Position): ValidMoves => {
   let validMoves: ValidMoves = []
 
   const horizontalMoves = checkHorizontalCells(board, { row, column })
@@ -50,7 +57,7 @@ export const getQueenMoves = (board: Board, { row, column }: Position) => {
   return validMoves
 }
 
-export const getRookMoves = (board: Board, { row, column }: Position) => {
+export const getRookMoves = (board: Board, { row, column }: Position): ValidMoves => {
   let validMoves: ValidMoves = []
 
   const horizontalMoves = checkHorizontalCells(board, { row, column })
@@ -61,7 +68,7 @@ export const getRookMoves = (board: Board, { row, column }: Position) => {
   return validMoves
 }
 
-export const getBishopMoves = (board: Board, { row, column }: Position) => {
+export const getBishopMoves = (board: Board, { row, column }: Position): ValidMoves => {
   let validMoves: ValidMoves = []
 
   const downwardDiagonalMoves = checkDownwardDiagonalCells(board, { row, column })
@@ -72,7 +79,7 @@ export const getBishopMoves = (board: Board, { row, column }: Position) => {
   return validMoves
 }
 
-export const getKnightMoves = (board: Board, { row, column }: Position) => {
+export const getKnightMoves = (board: Board, { row, column }: Position): ValidMoves => {
   let validMoves: ValidMoves = []
 
   const upwardInLMoves = checkUpwardInLCells(board, { row, column })
@@ -83,7 +90,7 @@ export const getKnightMoves = (board: Board, { row, column }: Position) => {
   return validMoves
 }
 
-export const getPawnMoves = (board: Board, { row, column }: Position) => {
+export const getPawnMoves = (board: Board, { row, column }: Position): ValidMoves => {
   // if (isCellEmpty(board, { row, column })) {
   // } else {
   //   // Quizas aca mas adelante se puede realizar la logica para coronar al peon

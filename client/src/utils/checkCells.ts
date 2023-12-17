@@ -21,6 +21,45 @@ const checkCellContent = (board: Board, { row, column }: Position) => {
   return !itIsOffTheBoard(board, { row, column }) && !isCellEmpty(board, { row, column })
 }
 
+export const check8WayCells = (board: Board, { row, column }: Position): ValidMoves => {
+  const eightWayMoves: ValidMoves = []
+
+  const upRow = row - 1
+  const downRow = row + 1
+
+  const leftColumn = column - 1
+  const rightColumn = column + 1
+
+  // Diagonal izquierda superior
+  checkCellContent(board, { row: upRow, column: leftColumn }) &&
+    eightWayMoves.push([upRow, leftColumn])
+
+  // Arriba
+  checkCellContent(board, { row: upRow, column }) && eightWayMoves.push([upRow, column])
+
+  // Diagonal derecha superior
+  checkCellContent(board, { row: upRow, column: rightColumn }) &&
+    eightWayMoves.push([upRow, rightColumn])
+
+  // Izquierda
+  checkCellContent(board, { row, column: leftColumn }) && eightWayMoves.push([row, leftColumn])
+  // Derecha
+  checkCellContent(board, { row, column: rightColumn }) && eightWayMoves.push([row, rightColumn])
+
+  // Diagonal izquierda inferior
+  checkCellContent(board, { row: downRow, column: leftColumn }) &&
+    eightWayMoves.push([downRow, leftColumn])
+
+  // Abajo
+  checkCellContent(board, { row: downRow, column }) && eightWayMoves.push([downRow, column])
+
+  // Diagonal derecha inferior
+  checkCellContent(board, { row: downRow, column: rightColumn }) &&
+    eightWayMoves.push([downRow, rightColumn])
+
+  return eightWayMoves
+}
+
 export const checkHorizontalCells = (board: Board, { row, column }: Position): ValidMoves => {
   const horizontalMoves: ValidMoves = []
   let previousColumn = column - 1
