@@ -1,9 +1,16 @@
 import { useContext } from 'react'
 
+import { KnightSVG } from 'src/assets/svg/KnightSVG'
 import { QueenSVG } from 'src/assets/svg/QueenSVG'
 import { TemporaryCell } from 'src/components/TemporaryCell'
 import { BoardContext, Pieces, Position, TemporaryCells } from 'src/contexts/BoardContext'
-import { getBishopMoves, getPawnMoves, getQueenMoves, getRookMoves } from 'src/utils/getPieceMoves'
+import {
+  getBishopMoves,
+  getKnightMoves,
+  getPawnMoves,
+  getQueenMoves,
+  getRookMoves,
+} from 'src/utils/getPieceMoves'
 
 export const King = (position: Position): JSX.Element => {
   // const { board, handleCurrentPiece, handleGetCell } = useContext(BoardContext)
@@ -161,6 +168,40 @@ export const Bishop = (position: Position): JSX.Element => {
   )
 }
 
+export const Knight = (position: Position): JSX.Element => {
+  const { board, currentPiece, handleCurrentPiece, handleGetCell, handleTemporaryCells } =
+    useContext(BoardContext)
+
+  const onConfirmMove = () => {
+    const cellContent = handleGetCell(position)
+    handleCurrentPiece(cellContent)
+
+    const isTheSamePiece =
+      currentPiece &&
+      currentPiece?.position.row === position.row &&
+      currentPiece?.position.column === position.column
+
+    console.log({ isTheSamePiece })
+
+    if (!isTheSamePiece) {
+      const knightMoves = getKnightMoves(board, position)
+
+      const temporaryCells: TemporaryCells = knightMoves.map(({ ['0']: row, ['1']: column }) => ({
+        element: <TemporaryCell {...{ row, column }} />,
+        position: { row, column },
+        piecePosition: {
+          row: cellContent?.position.row || 0,
+          column: cellContent?.position.column || 0,
+        },
+      }))
+
+      handleTemporaryCells(temporaryCells)
+    }
+  }
+
+  return <KnightSVG onClick={onConfirmMove} />
+}
+
 export const Pawn = (position: Position): JSX.Element => {
   const { board, handleCurrentPiece, handleGetCell } = useContext(BoardContext)
 
@@ -200,7 +241,7 @@ export const handleGetPieceComponent = (pieceName: Pieces, { row, column }: Posi
     queen: <Queen {...{ row, column }} />,
     rook: <Rook {...{ row, column }} />,
     bishop: <Bishop {...{ row, column }} />,
-    knight: <div />,
+    knight: <Knight {...{ row, column }} />,
     pawn: <Pawn {...{ row, column }} />,
   }
   return PieceComponent[pieceName]

@@ -1,8 +1,10 @@
 import { Board, Position } from 'src/contexts/BoardContext'
 import {
   checkDownwardDiagonalCells,
+  checkDownwardInLCells,
   checkHorizontalCells,
   checkUpwardDiagonalCells,
+  checkUpwardInLCells,
   checkVerticalCells,
 } from 'src/utils/checkCells'
 
@@ -73,10 +75,10 @@ export const getBishopMoves = (board: Board, { row, column }: Position) => {
 export const getKnightMoves = (board: Board, { row, column }: Position) => {
   let validMoves: ValidMoves = []
 
-  const downwardDiagonalMoves = checkDownwardDiagonalCells(board, { row, column })
-  const upwardDiagonalMoves = checkUpwardDiagonalCells(board, { row, column })
+  const upwardInLMoves = checkUpwardInLCells(board, { row, column })
+  const downwardInLMoves = checkDownwardInLCells(board, { row, column })
 
-  validMoves = validMoves.concat(downwardDiagonalMoves).concat(upwardDiagonalMoves)
+  validMoves = validMoves.concat(upwardInLMoves).concat(downwardInLMoves)
 
   return validMoves
 }
