@@ -4,8 +4,17 @@ import { ValidMoves } from 'src/utils/getPieceMoves'
 const leftBorder = 0
 const rightBorder = 7
 
-const isCellEmpty = (board: Board, { row, column }: Position) => {
+const itIsOffTheBoard = (board: Board, { row, column }: Position) => {
   return typeof board[row]?.[column] !== 'undefined'
+}
+
+const isCellEmpty = (board: Board, { row, column }: Position) => {
+  return !!board[row][column]
+}
+
+const checkCellContent = (board: Board, { row, column }: Position) => {
+  // return itIsOffTheBoard(board, { row, column }) && !isCellEmpty(board, { row, column })
+  return !isCellEmpty(board, { row, column })
 }
 
 export const checkHorizontalCells = (board: Board, { row, column }: Position): ValidMoves => {
@@ -13,14 +22,24 @@ export const checkHorizontalCells = (board: Board, { row, column }: Position): V
   let previousColumn = column - 1
   let nextColumn = column + 1
 
-  while (previousColumn >= leftBorder || nextColumn <= rightBorder) {
-    isCellEmpty(board, { row, column: previousColumn }) &&
+  while (previousColumn >= leftBorder) {
+    if (checkCellContent(board, { row, column: previousColumn })) {
       horizontalMoves.push([row, previousColumn])
-    isCellEmpty(board, { row, column: nextColumn }) && horizontalMoves.push([row, nextColumn])
-
-    previousColumn--
-    nextColumn++
+      previousColumn--
+    } else {
+      break
+    }
   }
+
+  while (nextColumn <= rightBorder) {
+    if (checkCellContent(board, { row, column: nextColumn })) {
+      horizontalMoves.push([row, nextColumn])
+      nextColumn++
+    } else {
+      break
+    }
+  }
+
   return horizontalMoves
 }
 
@@ -29,12 +48,22 @@ export const checkVerticalCells = (board: Board, { row, column }: Position): Val
   let previousRow = row - 1
   let nextRow = row + 1
 
-  while (previousRow >= leftBorder || nextRow <= rightBorder) {
-    isCellEmpty(board, { row: previousRow, column }) && verticalMoves.push([previousRow, column])
-    isCellEmpty(board, { row: nextRow, column }) && verticalMoves.push([nextRow, column])
+  while (previousRow >= leftBorder) {
+    if (checkCellContent(board, { row: previousRow, column })) {
+      verticalMoves.push([previousRow, column])
+      previousRow--
+    } else {
+      break
+    }
+  }
 
-    previousRow--
-    nextRow++
+  while (nextRow <= rightBorder) {
+    if (checkCellContent(board, { row: nextRow, column })) {
+      verticalMoves.push([nextRow, column])
+      nextRow++
+    } else {
+      break
+    }
   }
   return verticalMoves
 }
@@ -56,9 +85,9 @@ export const checkDownwardDiagonalCells = (
     (upperLeftRow >= leftBorder && upperLeftColumn >= leftBorder) ||
     (lowerRightRow <= rightBorder && lowerRightColumn <= rightBorder)
   ) {
-    isCellEmpty(board, { row: upperLeftRow, column: upperLeftColumn }) &&
+    itIsOffTheBoard(board, { row: upperLeftRow, column: upperLeftColumn }) &&
       downwardDiagonalMoves.push([upperLeftRow, upperLeftColumn])
-    isCellEmpty(board, { row: lowerRightRow, column: lowerRightColumn }) &&
+    itIsOffTheBoard(board, { row: lowerRightRow, column: lowerRightColumn }) &&
       downwardDiagonalMoves.push([lowerRightRow, lowerRightColumn])
 
     upperLeftRow--
@@ -84,9 +113,9 @@ export const checkUpwardDiagonalCells = (board: Board, { row, column }: Position
     (lowerLeftRow <= rightBorder && lowerLeftColumn >= leftBorder) ||
     (upperRightRow >= leftBorder && upperRightColumn <= rightBorder)
   ) {
-    isCellEmpty(board, { row: lowerLeftRow, column: lowerLeftColumn }) &&
+    itIsOffTheBoard(board, { row: lowerLeftRow, column: lowerLeftColumn }) &&
       upwardDiagonalMoves.push([lowerLeftRow, lowerLeftColumn])
-    isCellEmpty(board, { row: upperRightRow, column: upperRightColumn }) &&
+    itIsOffTheBoard(board, { row: upperRightRow, column: upperRightColumn }) &&
       upwardDiagonalMoves.push([upperRightRow, upperRightColumn])
 
     lowerLeftRow++
