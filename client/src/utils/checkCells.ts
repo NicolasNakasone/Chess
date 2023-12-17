@@ -4,9 +4,14 @@ import { ValidMoves } from 'src/utils/getPieceMoves'
 const leftBorder = 0
 const rightBorder = 7
 
-const itIsOffTheBoard = (board: Board, { row, column }: Position) => {
-  return typeof board[row]?.[column] !== 'undefined'
-}
+/* 
+  Antes llamada isCellEmpty, quedara comentada ya que los ciclos while se encargan de cortar cuando se llegue
+  al limite del tablero, lo que hace que nunca se revise una posicion que no exista, por lo que nunca se llega
+  a dar el caso en que esta funcion retorne false
+ */
+// const itIsOffTheBoard = (board: Board, { row, column }: Position) => {
+//   return typeof board[row]?.[column] !== 'undefined'
+// }
 
 const isCellEmpty = (board: Board, { row, column }: Position) => {
   return !!board[row][column]
@@ -81,19 +86,24 @@ export const checkDownwardDiagonalCells = (
   let lowerRightRow = row + 1
   let lowerRightColumn = column + 1
 
-  while (
-    (upperLeftRow >= leftBorder && upperLeftColumn >= leftBorder) ||
-    (lowerRightRow <= rightBorder && lowerRightColumn <= rightBorder)
-  ) {
-    itIsOffTheBoard(board, { row: upperLeftRow, column: upperLeftColumn }) &&
+  while (upperLeftRow >= leftBorder && upperLeftColumn >= leftBorder) {
+    if (checkCellContent(board, { row: upperLeftRow, column: upperLeftColumn })) {
       downwardDiagonalMoves.push([upperLeftRow, upperLeftColumn])
-    itIsOffTheBoard(board, { row: lowerRightRow, column: lowerRightColumn }) &&
-      downwardDiagonalMoves.push([lowerRightRow, lowerRightColumn])
+      upperLeftRow--
+      upperLeftColumn--
+    } else {
+      break
+    }
+  }
 
-    upperLeftRow--
-    upperLeftColumn--
-    lowerRightRow++
-    lowerRightColumn++
+  while (lowerRightRow <= rightBorder && lowerRightColumn <= rightBorder) {
+    if (checkCellContent(board, { row: lowerRightRow, column: lowerRightColumn })) {
+      downwardDiagonalMoves.push([lowerRightRow, lowerRightColumn])
+      lowerRightRow++
+      lowerRightColumn++
+    } else {
+      break
+    }
   }
   return downwardDiagonalMoves
 }
@@ -109,19 +119,24 @@ export const checkUpwardDiagonalCells = (board: Board, { row, column }: Position
   let upperRightRow = row - 1
   let upperRightColumn = column + 1
 
-  while (
-    (lowerLeftRow <= rightBorder && lowerLeftColumn >= leftBorder) ||
-    (upperRightRow >= leftBorder && upperRightColumn <= rightBorder)
-  ) {
-    itIsOffTheBoard(board, { row: lowerLeftRow, column: lowerLeftColumn }) &&
+  while (lowerLeftRow <= rightBorder && lowerLeftColumn >= leftBorder) {
+    if (checkCellContent(board, { row: lowerLeftRow, column: lowerLeftColumn })) {
       upwardDiagonalMoves.push([lowerLeftRow, lowerLeftColumn])
-    itIsOffTheBoard(board, { row: upperRightRow, column: upperRightColumn }) &&
-      upwardDiagonalMoves.push([upperRightRow, upperRightColumn])
+      lowerLeftRow++
+      lowerLeftColumn--
+    } else {
+      break
+    }
+  }
 
-    lowerLeftRow++
-    lowerLeftColumn--
-    upperRightRow--
-    upperRightColumn++
+  while (upperRightRow >= leftBorder && upperRightColumn <= rightBorder) {
+    if (checkCellContent(board, { row: upperRightRow, column: upperRightColumn })) {
+      upwardDiagonalMoves.push([upperRightRow, upperRightColumn])
+      upperRightRow--
+      upperRightColumn++
+    } else {
+      break
+    }
   }
   return upwardDiagonalMoves
 }
