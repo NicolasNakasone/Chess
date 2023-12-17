@@ -1,8 +1,9 @@
 import { useContext } from 'react'
 
+import { QueenSVG } from 'src/assets/svg/QueenSVG'
 import { TemporaryCell } from 'src/components/TemporaryCell'
 import { BoardContext, Pieces, Position, TemporaryCells } from 'src/contexts/BoardContext'
-import { getBishopMoves, getPawnMoves, getRookMoves } from 'src/utils/getPieceMoves'
+import { getBishopMoves, getPawnMoves, getQueenMoves, getRookMoves } from 'src/utils/getPieceMoves'
 
 export const King = (position: Position): JSX.Element => {
   // const { board, handleCurrentPiece, handleGetCell } = useContext(BoardContext)
@@ -28,6 +29,40 @@ export const King = (position: Position): JSX.Element => {
       <rect x="40" y="55" width="20" height="10" fill="#000" />
     </svg>
   )
+}
+
+export const Queen = (position: Position): JSX.Element => {
+  const { board, currentPiece, handleCurrentPiece, handleGetCell, handleTemporaryCells } =
+    useContext(BoardContext)
+
+  const onConfirmMove = () => {
+    const cellContent = handleGetCell(position)
+    handleCurrentPiece(cellContent)
+
+    const isTheSamePiece =
+      currentPiece &&
+      currentPiece?.position.row === position.row &&
+      currentPiece?.position.column === position.column
+
+    console.log({ isTheSamePiece })
+
+    if (!isTheSamePiece) {
+      const queenMoves = getQueenMoves(board, position)
+
+      const temporaryCells: TemporaryCells = queenMoves.map(({ ['0']: row, ['1']: column }) => ({
+        element: <TemporaryCell {...{ row, column }} />,
+        position: { row, column },
+        piecePosition: {
+          row: cellContent?.position.row || 0,
+          column: cellContent?.position.column || 0,
+        },
+      }))
+
+      handleTemporaryCells(temporaryCells)
+    }
+  }
+
+  return <QueenSVG onClick={onConfirmMove} />
 }
 
 export const Rook = (position: Position): JSX.Element => {
@@ -162,7 +197,7 @@ type Piece = {
 export const handleGetPieceComponent = (pieceName: Pieces, { row, column }: Position) => {
   const PieceComponent: Piece = {
     king: <King {...{ row, column }} />,
-    queen: <div />,
+    queen: <Queen {...{ row, column }} />,
     rook: <Rook {...{ row, column }} />,
     bishop: <Bishop {...{ row, column }} />,
     knight: <div />,

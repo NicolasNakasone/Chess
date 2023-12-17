@@ -117,6 +117,24 @@ const checkUpwardDiagonalCells = (board: Board, { row, column }: Position) => {
   return upwardDiagonalMoves
 }
 
+export const getQueenMoves = (board: Board, { row, column }: Position) => {
+  let validMoves: ValidMoves = []
+
+  const horizontalMoves = checkHorizontalCells(board, { row, column })
+  const verticalMoves = checkVerticalCells(board, { row, column })
+  const downwardDiagonalMoves = checkDownwardDiagonalCells(board, { row, column })
+  const upwardDiagonalMoves = checkUpwardDiagonalCells(board, { row, column })
+
+  validMoves = [
+    ...horizontalMoves,
+    ...verticalMoves,
+    ...downwardDiagonalMoves,
+    ...upwardDiagonalMoves,
+  ]
+
+  return validMoves
+}
+
 export const getRookMoves = (board: Board, { row, column }: Position) => {
   let validMoves: ValidMoves = []
 
