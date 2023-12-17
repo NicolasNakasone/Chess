@@ -2,7 +2,7 @@ import { useContext } from 'react'
 
 import { TemporaryCell } from 'src/components/TemporaryCell'
 import { BoardContext, Pieces, Position, TemporaryCells } from 'src/contexts/BoardContext'
-import { getPawnMoves, getRookMoves } from 'src/utils/getPieceMoves'
+import { getBishopMoves, getPawnMoves, getRookMoves } from 'src/utils/getPieceMoves'
 
 export const King = (position: Position): JSX.Element => {
   // const { board, handleCurrentPiece, handleGetCell } = useContext(BoardContext)
@@ -79,6 +79,53 @@ export const Rook = (position: Position): JSX.Element => {
   )
 }
 
+export const Bishop = (position: Position): JSX.Element => {
+  const { board, currentPiece, handleCurrentPiece, handleGetCell, handleTemporaryCells } =
+    useContext(BoardContext)
+
+  const onConfirmMove = () => {
+    const cellContent = handleGetCell(position)
+    handleCurrentPiece(cellContent)
+
+    const isTheSamePiece =
+      currentPiece &&
+      currentPiece?.position.row === position.row &&
+      currentPiece?.position.column === position.column
+
+    console.log({ isTheSamePiece })
+
+    if (!isTheSamePiece) {
+      const bishopMoves = getBishopMoves(board, position)
+
+      const temporaryCells: TemporaryCells = bishopMoves.map(({ ['0']: row, ['1']: column }) => ({
+        element: <TemporaryCell {...{ row, column }} />,
+        position: { row, column },
+        piecePosition: {
+          row: cellContent?.position.row || 0,
+          column: cellContent?.position.column || 0,
+        },
+      }))
+
+      handleTemporaryCells(temporaryCells)
+    }
+  }
+
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      version="1.1"
+      width="100"
+      height="100"
+      viewBox="0 0 100 100"
+      onClick={onConfirmMove}
+    >
+      <rect x="30" y="70" width="40" height="20" fill="#008000" />
+      <circle cx="50" cy="30" r="15" fill="#008000" />
+      <path d="M35 85 Q50 70 65 85" stroke="#000" strokeWidth="3" fill="none" />
+    </svg>
+  )
+}
+
 export const Pawn = (position: Position): JSX.Element => {
   const { board, handleCurrentPiece, handleGetCell } = useContext(BoardContext)
 
@@ -117,7 +164,7 @@ export const handleGetPieceComponent = (pieceName: Pieces, { row, column }: Posi
     king: <King {...{ row, column }} />,
     queen: <div />,
     rook: <Rook {...{ row, column }} />,
-    bishop: <div />,
+    bishop: <Bishop {...{ row, column }} />,
     knight: <div />,
     pawn: <Pawn {...{ row, column }} />,
   }

@@ -27,8 +27,6 @@ export type ValidMoves = [number, number][]
 const leftBorder = 0
 const rightBorder = 7
 
-// const validMoves: ValidMoves = []
-
 const isCellEmpty = (board: Board, { row, column }: Position) => {
   return typeof board[row]?.[column] !== 'undefined'
 }
@@ -49,7 +47,7 @@ const checkHorizontalCells = (board: Board, { row, column }: Position): ValidMov
   return horizontalMoves
 }
 
-const checkVerticalMoves = (board: Board, { row, column }: Position): ValidMoves => {
+const checkVerticalCells = (board: Board, { row, column }: Position): ValidMoves => {
   const verticalMoves: ValidMoves = []
   let previousRow = row - 1
   let nextRow = row + 1
@@ -64,20 +62,79 @@ const checkVerticalMoves = (board: Board, { row, column }: Position): ValidMoves
   return verticalMoves
 }
 
-// export const getKingMoves = (board: Board, { row, column }: Position) => {
-//   if (isCellEmpty(board, { row, column })) {
-//   } else {
-//     return validMoves
-//   }
-// }
+// Diagonal izquierda superior -> row: 4, columm: 5 => row: 3, column: 4
+// Diagonal derecha inferior -> row: 4, columm: 5 => row: 5, column: 6
+const checkDownwardDiagonalCells = (board: Board, { row, column }: Position) => {
+  const downwardDiagonalMoves: ValidMoves = []
+  let upperLeftRow = row - 1
+  let upperLeftColumn = column - 1
+
+  let lowerRightRow = row + 1
+  let lowerRightColumn = column + 1
+
+  while (
+    (upperLeftRow >= leftBorder && upperLeftColumn >= leftBorder) ||
+    (lowerRightRow <= rightBorder && lowerRightColumn <= rightBorder)
+  ) {
+    isCellEmpty(board, { row: upperLeftRow, column: upperLeftColumn }) &&
+      downwardDiagonalMoves.push([upperLeftRow, upperLeftColumn])
+    isCellEmpty(board, { row: lowerRightRow, column: lowerRightColumn }) &&
+      downwardDiagonalMoves.push([lowerRightRow, lowerRightColumn])
+
+    upperLeftRow--
+    upperLeftColumn--
+    lowerRightRow++
+    lowerRightColumn++
+  }
+  return downwardDiagonalMoves
+}
+
+// Diagonal izquierda inferior -> row: 4, column: 5 => row: 5, column: 4
+// Diagonal derecha superior -> row: 4, column: 5 => row: 3, column: 6
+const checkUpwardDiagonalCells = (board: Board, { row, column }: Position) => {
+  // debugger
+  const upwardDiagonalMoves: ValidMoves = []
+  let lowerLeftRow = row + 1
+  let lowerLeftColumn = column - 1
+
+  let upperRightRow = row - 1
+  let upperRightColumn = column + 1
+
+  while (
+    (lowerLeftRow <= rightBorder && lowerLeftColumn >= leftBorder) ||
+    (upperRightRow >= leftBorder && upperRightColumn <= rightBorder)
+  ) {
+    isCellEmpty(board, { row: lowerLeftRow, column: lowerLeftColumn }) &&
+      upwardDiagonalMoves.push([lowerLeftRow, lowerLeftColumn])
+    isCellEmpty(board, { row: upperRightRow, column: upperRightColumn }) &&
+      upwardDiagonalMoves.push([upperRightRow, upperRightColumn])
+
+    lowerLeftRow++
+    lowerLeftColumn--
+    upperRightRow--
+    upperRightColumn++
+  }
+  return upwardDiagonalMoves
+}
 
 export const getRookMoves = (board: Board, { row, column }: Position) => {
   let validMoves: ValidMoves = []
 
   const horizontalMoves = checkHorizontalCells(board, { row, column })
-  const verticalMoves = checkVerticalMoves(board, { row, column })
+  const verticalMoves = checkVerticalCells(board, { row, column })
 
   validMoves = validMoves.concat(horizontalMoves).concat(verticalMoves)
+
+  return validMoves
+}
+
+export const getBishopMoves = (board: Board, { row, column }: Position) => {
+  let validMoves: ValidMoves = []
+
+  const downwardDiagonalMoves = checkDownwardDiagonalCells(board, { row, column })
+  const upwardDiagonalMoves = checkUpwardDiagonalCells(board, { row, column })
+
+  validMoves = validMoves.concat(downwardDiagonalMoves).concat(upwardDiagonalMoves)
 
   return validMoves
 }

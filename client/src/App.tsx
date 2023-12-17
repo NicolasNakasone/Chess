@@ -1,6 +1,6 @@
 import { useContext, useEffect } from 'react'
 
-import { Rook } from 'src/components/Pieces'
+import { Bishop, Rook } from 'src/components/Pieces'
 import { BoardContext } from 'src/contexts/BoardContext'
 
 import 'src/App.css'
@@ -47,10 +47,10 @@ export const App = () => {
   // A fines de probar se setea de esta forma, mas adelante se deberia ver la manera de setear un tablero entero
   useEffect(() => {
     handleSetCell({
-      element: <Rook {...{ row: 7, column: 4 }} />,
-      position: { row: 7, column: 4 },
+      element: <Bishop {...{ row: 4, column: 5 }} />,
+      position: { row: 4, column: 5 },
       playingAs: 'white',
-      pieceName: 'rook',
+      pieceName: 'bishop',
     })
   }, [])
 
@@ -70,7 +70,7 @@ export const App = () => {
       >
         {board.map((column, i) => {
           return column.map((cell, j) => {
-            console.log({ column, cell, i, j })
+            // console.log({ column, cell, i, j })
             return (
               <div
                 key={`${i}${j}`}
