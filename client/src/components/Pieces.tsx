@@ -2,6 +2,7 @@ import { useContext } from 'react'
 
 import { KingSVG } from 'src/assets/svg/KingSVG'
 import { KnightSVG } from 'src/assets/svg/KnightSVG'
+import { PawnSVG } from 'src/assets/svg/PawnSVG'
 import { QueenSVG } from 'src/assets/svg/QueenSVG'
 import { TemporaryCell } from 'src/components/TemporaryCell'
 import { BoardContext, Pieces, Position, TemporaryCells } from 'src/contexts/BoardContext'
@@ -213,32 +214,37 @@ export const Knight = (position: Position): JSX.Element => {
 }
 
 export const Pawn = (position: Position): JSX.Element => {
-  const { board, handleCurrentPiece, handleGetCell } = useContext(BoardContext)
+  const { board, currentPiece, handleCurrentPiece, handleGetCell, handleTemporaryCells } =
+    useContext(BoardContext)
 
   const onConfirmMove = () => {
     const cellContent = handleGetCell(position)
     handleCurrentPiece(cellContent)
 
-    const pawnMoves = getPawnMoves(board, position)
+    const isTheSamePiece =
+      currentPiece &&
+      currentPiece?.position.row === position.row &&
+      currentPiece?.position.column === position.column
 
-    console.log(pawnMoves)
+    console.log({ isTheSamePiece })
+
+    if (!isTheSamePiece) {
+      const pawnMoves = getPawnMoves(board, position)
+
+      const temporaryCells: TemporaryCells = pawnMoves.map(({ ['0']: row, ['1']: column }) => ({
+        element: <TemporaryCell {...{ row, column }} />,
+        position: { row, column },
+        piecePosition: {
+          row: cellContent?.position.row || 0,
+          column: cellContent?.position.column || 0,
+        },
+      }))
+
+      handleTemporaryCells(temporaryCells)
+    }
   }
 
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      version="1.1"
-      width="100"
-      height="100"
-      viewBox="0 0 100 100"
-      onClick={onConfirmMove}
-    >
-      <circle cx="50" cy="50" r="40" fill="#f0d9b5" />
-      <circle cx="50" cy="30" r="10" fill="#000" />
-      <circle cx="50" cy="30" r="6" fill="#fff" />
-      <ellipse cx="50" cy="85" rx="30" ry="12" fill="#000" />
-    </svg>
-  )
+  return <PawnSVG onClick={onConfirmMove} />
 }
 
 type Piece = {

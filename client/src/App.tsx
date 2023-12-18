@@ -1,6 +1,6 @@
 import { useContext, useEffect } from 'react'
 
-import { Bishop, King, Knight, Queen, Rook } from 'src/components/Pieces'
+import { Bishop, King, Knight, Pawn, Queen, Rook } from 'src/components/Pieces'
 import { BoardContext } from 'src/contexts/BoardContext'
 
 import 'src/App.css'
@@ -75,6 +75,18 @@ export const App = () => {
       position: { row: 7, column: 1 },
       playingAs: 'white',
       pieceName: 'knight',
+    })
+    handleSetCell({
+      element: <Pawn {...{ row: 1, column: 5 }} />,
+      position: { row: 1, column: 5 },
+      playingAs: 'white',
+      pieceName: 'pawn',
+    })
+    handleSetCell({
+      element: <Pawn {...{ row: 6, column: 5 }} />,
+      position: { row: 6, column: 5 },
+      playingAs: 'black',
+      pieceName: 'pawn',
     })
   }, [])
 

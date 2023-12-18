@@ -4,6 +4,7 @@ import {
   checkDownwardDiagonalCells,
   checkDownwardInLCells,
   checkHorizontalCells,
+  checkOneCellForward,
   checkUpwardDiagonalCells,
   checkUpwardInLCells,
   checkVerticalCells,
@@ -91,12 +92,9 @@ export const getKnightMoves = (board: Board, { row, column }: Position): ValidMo
 }
 
 export const getPawnMoves = (board: Board, { row, column }: Position): ValidMoves => {
-  // if (isCellEmpty(board, { row, column })) {
-  // } else {
-  //   // Quizas aca mas adelante se puede realizar la logica para coronar al peon
-  //   // return validMoves
-  // }
-  return [[row, ++column]]
+  const validMoves: ValidMoves = checkOneCellForward(board, { row, column })
+
+  return validMoves
 }
 
 /* 

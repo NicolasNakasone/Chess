@@ -237,3 +237,15 @@ export const checkDownwardInLCells = (board: Board, { row, column }: Position): 
 
   return downwardInLMoves
 }
+
+export const checkOneCellForward = (board: Board, { row, column }: Position): ValidMoves => {
+  const pawnMoves: ValidMoves = []
+
+  const isAWhitePiece = board[row][column] && board[row][column]?.playingAs === 'white'
+  const calculatedRow = isAWhitePiece ? row + 1 : row - 1
+
+  checkCellContent(board, { row: calculatedRow, column }) &&
+    pawnMoves.push([calculatedRow, column])
+
+  return pawnMoves
+}
