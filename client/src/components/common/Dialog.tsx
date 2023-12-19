@@ -14,25 +14,23 @@ export const Dialog = ({ children, open, onClose }: INewDialog) => {
   const dialogRootRef = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
-    const dialogRoot = document.getElementById(DIALOG_ROOT_ID)
+    let newDialogRoot = document.getElementById(DIALOG_ROOT_ID)
 
-    if (!dialogRoot) {
-      const newDialogRoot = document.createElement('div')
+    if (!newDialogRoot) {
+      newDialogRoot = document.createElement('div')
       newDialogRoot.setAttribute('id', DIALOG_ROOT_ID)
       newDialogRoot.style.position = 'fixed'
       newDialogRoot.style.top = '0'
       newDialogRoot.style.width = '100%'
       newDialogRoot.style.height = '100%'
-      newDialogRoot.style.display = 'flex'
+      newDialogRoot.style.display = 'none' // <-- Ocultar por defecto
       newDialogRoot.style.justifyContent = 'center'
       newDialogRoot.style.alignItems = 'center'
       newDialogRoot.style.backgroundColor = '#00000080'
       document.body.appendChild(newDialogRoot)
     }
 
-    return () => {
-      dialogRootRef.current = null
-    }
+    dialogRootRef.current = newDialogRoot // Actualizar la referencia
   }, [])
 
   useEffect(() => {
@@ -45,19 +43,21 @@ export const Dialog = ({ children, open, onClose }: INewDialog) => {
     onClose()
   }
 
-  return createPortal(
-    <div ref={dialogRootRef}>
-      <div
-        style={{
-          backgroundColor: '#fff',
-          width: '30vw',
-          minHeight: '20vh',
-        }}
-      >
-        {children}
-        <button onClick={handleClose}>Cerrar</button>
-      </div>
-    </div>,
-    dialogRootRef.current!
-  )
+  return dialogRootRef.current
+    ? createPortal(
+        <div>
+          <div
+            style={{
+              backgroundColor: '#fff',
+              width: '30vw',
+              minHeight: '20vh',
+            }}
+          >
+            {children}
+            <button onClick={handleClose}>Cerrar</button>
+          </div>
+        </div>,
+        dialogRootRef.current
+      )
+    : null
 }
