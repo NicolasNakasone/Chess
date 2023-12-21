@@ -136,8 +136,7 @@ export const BoardProvider = ({ children }: { children: JSX.Element }): JSX.Elem
     Leer lo que esta modificado, luego hacer commit. Luego seguir con el cambio de color
     de los svg segun la propiedad playingAs. Luego empezar con la logica de captura
   */
-
-  const handleClosePawnPromotion = () =>
+  const handleClosePawnPromotion = () => {
     setPromotedPawnKeys(prev => {
       if (prev) {
         return {
@@ -148,6 +147,7 @@ export const BoardProvider = ({ children }: { children: JSX.Element }): JSX.Elem
         return null
       }
     })
+  }
 
   const checkForPawnPromotion = (newPiece: BoardCell) => {
     const isNewPieceAPawn = newPiece.pieceName === 'pawn'
