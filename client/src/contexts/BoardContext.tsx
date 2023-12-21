@@ -40,6 +40,12 @@ interface BoardContextProps {
   temporaryIndexes: ValidMoves
   eraseTemporaryIndexes: () => void
   handleMovePiece: (position: Position) => void
+
+  openPawnPromotion: boolean
+  setOpenPawnPromotion: (value: SetStateAction<boolean>) => void
+  handleClosePawnPromotion: () => void
+
+  handlePawnPromotion: (selectedPiece: Exclude<Pieces, 'pawn' | 'king'>) => void
 }
 
 export const BoardContext = createContext<BoardContextProps>({
@@ -56,4 +62,9 @@ export const BoardContext = createContext<BoardContextProps>({
   temporaryIndexes: [],
   eraseTemporaryIndexes: () => null,
   handleMovePiece: () => null,
+
+  openPawnPromotion: false,
+  setOpenPawnPromotion: () => null,
+  handleClosePawnPromotion: () => null,
+  handlePawnPromotion: () => null,
 })

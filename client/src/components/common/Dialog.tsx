@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { CSSProperties, useEffect, useRef } from 'react'
 
 import { createPortal } from 'react-dom'
 
@@ -6,11 +6,13 @@ const DIALOG_ROOT_ID = 'dialog-root'
 
 interface INewDialog {
   children?: JSX.Element | JSX.Element[]
+  style?: CSSProperties | undefined
   open: boolean
   onClose: () => void
+  alwaysOpen?: boolean
 }
 
-export const Dialog = ({ children, open, onClose }: INewDialog) => {
+export const Dialog = ({ children, style, open, onClose, alwaysOpen }: INewDialog) => {
   const dialogRootRef = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
@@ -23,14 +25,14 @@ export const Dialog = ({ children, open, onClose }: INewDialog) => {
       newDialogRoot.style.top = '0'
       newDialogRoot.style.width = '100%'
       newDialogRoot.style.height = '100%'
-      newDialogRoot.style.display = 'none' // <-- Ocultar por defecto
+      newDialogRoot.style.display = 'none'
       newDialogRoot.style.justifyContent = 'center'
       newDialogRoot.style.alignItems = 'center'
       newDialogRoot.style.backgroundColor = '#00000080'
       document.body.appendChild(newDialogRoot)
     }
 
-    dialogRootRef.current = newDialogRoot // Actualizar la referencia
+    dialogRootRef.current = newDialogRoot as HTMLDivElement
   }, [])
 
   useEffect(() => {
@@ -51,10 +53,11 @@ export const Dialog = ({ children, open, onClose }: INewDialog) => {
               backgroundColor: '#fff',
               width: '30vw',
               minHeight: '20vh',
+              ...style,
             }}
           >
             {children}
-            <button onClick={handleClose}>Cerrar</button>
+            {!alwaysOpen && <button onClick={handleClose}>Cerrar</button>}
           </div>
         </div>,
         dialogRootRef.current

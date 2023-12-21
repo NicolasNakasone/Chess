@@ -1,5 +1,7 @@
 import { useContext, useEffect } from 'react'
 
+import { BishopSVG, KnightSVG, QueenSVG, RookSVG } from 'src/assets/svg'
+import { Dialog } from 'src/components/common/Dialog'
 import { Bishop, King, Knight, Pawn, Queen, Rook } from 'src/components/Pieces'
 import { BoardContext } from 'src/contexts/BoardContext'
 
@@ -42,45 +44,51 @@ import 'src/App.css'
 */
 
 export const App = () => {
-  const { board, handleSetCell } = useContext(BoardContext)
+  const {
+    board,
+    handleClosePawnPromotion,
+    handlePawnPromotion,
+    handleSetCell,
+    openPawnPromotion,
+  } = useContext(BoardContext)
 
   // A fines de probar se setea de esta forma, mas adelante se deberia ver la manera de setear un tablero entero
   useEffect(() => {
     handleSetCell({
       element: <King {...{ row: 7, column: 4 }} />,
       position: { row: 7, column: 4 },
-      playingAs: 'white',
+      playingAs: 'black',
       pieceName: 'king',
     })
     handleSetCell({
       element: <Queen {...{ row: 7, column: 3 }} />,
       position: { row: 7, column: 3 },
-      playingAs: 'white',
+      playingAs: 'black',
       pieceName: 'queen',
     })
     handleSetCell({
       element: <Rook {...{ row: 7, column: 0 }} />,
       position: { row: 7, column: 0 },
-      playingAs: 'white',
+      playingAs: 'black',
       pieceName: 'rook',
     })
     handleSetCell({
       element: <Bishop {...{ row: 7, column: 2 }} />,
       position: { row: 7, column: 2 },
-      playingAs: 'white',
+      playingAs: 'black',
+      pieceName: 'bishop',
+    })
+    handleSetCell({
+      element: <Bishop {...{ row: 7, column: 5 }} />,
+      position: { row: 7, column: 5 },
+      playingAs: 'black',
       pieceName: 'bishop',
     })
     handleSetCell({
       element: <Knight {...{ row: 7, column: 1 }} />,
       position: { row: 7, column: 1 },
-      playingAs: 'white',
+      playingAs: 'black',
       pieceName: 'knight',
-    })
-    handleSetCell({
-      element: <Pawn {...{ row: 1, column: 5 }} />,
-      position: { row: 1, column: 5 },
-      playingAs: 'white',
-      pieceName: 'pawn',
     })
     handleSetCell({
       element: <Pawn {...{ row: 6, column: 5 }} />,
@@ -88,13 +96,13 @@ export const App = () => {
       playingAs: 'black',
       pieceName: 'pawn',
     })
+    handleSetCell({
+      element: <Pawn {...{ row: 1, column: 6 }} />,
+      position: { row: 1, column: 6 },
+      playingAs: 'white',
+      pieceName: 'pawn',
+    })
   }, [])
-
-  // const Board = useMemo(() => {
-  //   return (
-
-  //   )
-  // }, [board])
 
   return (
     <main>
@@ -123,6 +131,24 @@ export const App = () => {
           })
         })}
       </div>
+      <Dialog
+        open={openPawnPromotion}
+        alwaysOpen
+        style={{
+          backgroundColor: '#DDDDDD',
+        }}
+        onClose={handleClosePawnPromotion}
+      >
+        <div>
+          <p>Coronación de peón</p>
+          <div>
+            <QueenSVG onClick={() => handlePawnPromotion('queen')} />
+            <RookSVG onClick={() => handlePawnPromotion('rook')} />
+            <BishopSVG onClick={() => handlePawnPromotion('bishop')} />
+            <KnightSVG onClick={() => handlePawnPromotion('knight')} />
+          </div>
+        </div>
+      </Dialog>
     </main>
   )
 }

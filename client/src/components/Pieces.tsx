@@ -1,9 +1,6 @@
 import { useContext } from 'react'
 
-import { KingSVG } from 'src/assets/svg/KingSVG'
-import { KnightSVG } from 'src/assets/svg/KnightSVG'
-import { PawnSVG } from 'src/assets/svg/PawnSVG'
-import { QueenSVG } from 'src/assets/svg/QueenSVG'
+import { BishopSVG, KingSVG, KnightSVG, PawnSVG, QueenSVG, RookSVG } from 'src/assets/svg'
 import { TemporaryCell } from 'src/components/TemporaryCell'
 import { BoardContext, Pieces, Position, TemporaryCells } from 'src/contexts/BoardContext'
 import {
@@ -114,22 +111,7 @@ export const Rook = (position: Position): JSX.Element => {
     }
   }
 
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      version="1.1"
-      width="100"
-      height="100"
-      viewBox="0 0 100 100"
-      onClick={onConfirmMove}
-    >
-      <rect x="35" y="35" width="30" height="30" fill="#f0d9b5" />
-      <rect x="40" y="25" width="20" height="10" fill="#000" />
-      <rect x="40" y="65" width="20" height="10" fill="#000" />
-      <rect x="25" y="40" width="10" height="20" fill="#000" />
-      <rect x="65" y="40" width="10" height="20" fill="#000" />
-    </svg>
-  )
+  return <RookSVG onClick={onConfirmMove} />
 }
 
 export const Bishop = (position: Position): JSX.Element => {
@@ -163,20 +145,7 @@ export const Bishop = (position: Position): JSX.Element => {
     }
   }
 
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      version="1.1"
-      width="100"
-      height="100"
-      viewBox="0 0 100 100"
-      onClick={onConfirmMove}
-    >
-      <rect x="30" y="70" width="40" height="20" fill="#008000" />
-      <circle cx="50" cy="30" r="15" fill="#008000" />
-      <path d="M35 85 Q50 70 65 85" stroke="#000" strokeWidth="3" fill="none" />
-    </svg>
-  )
+  return <BishopSVG onClick={onConfirmMove} />
 }
 
 export const Knight = (position: Position): JSX.Element => {

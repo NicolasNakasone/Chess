@@ -5,6 +5,7 @@ import {
   Board,
   BoardCell,
   BoardContext,
+  Pieces,
   Position,
   TemporaryCells,
 } from 'src/contexts/BoardContext'
@@ -18,6 +19,9 @@ export const BoardProvider = ({ children }: { children: JSX.Element }): JSX.Elem
   const [board, setBoard] = useState<Board>(emptyBlocks)
   const [currentPiece, setCurrentPiece] = useState<BoardCell | null>(null)
   const [temporaryIndexes, setTemporaryIndexes] = useState<ValidMoves>([])
+
+  const [openPawnPromotion, setOpenPawnPromotion] = useState(false)
+  const [promotedPawnCell, setPromotedPawnCell] = useState<BoardCell | null>(null)
 
   const handleGetCell = ({ row, column }: Position): BoardCell | null => {
     return board[row][column]
@@ -116,8 +120,57 @@ export const BoardProvider = ({ children }: { children: JSX.Element }): JSX.Elem
         return newBoard
       })
 
+      /* 
+        En vez de solo la funcion handlePawnPromotion, en el futuro podrian haber
+        varias funciones para los movimientos especiales como el enroque, las casillas
+        dobles del peon al inicio, o el peon al paso
+      */
+      checkForPawnPromotion(newPiece)
+
       setTemporaryIndexes([])
       setCurrentPiece(null)
+    }
+  }
+
+  /* 
+    Leer lo que esta modificado, luego hacer commit. Luego seguir con el cambio de color
+    de los svg segun la propiedad playingAs. Luego empezar con la logica de captura
+  */
+
+  const handleClosePawnPromotion = () => setOpenPawnPromotion(false)
+
+  const checkForPawnPromotion = (newPiece: BoardCell) => {
+    const isNewPieceAPawn = newPiece.pieceName === 'pawn'
+    const isAWhitePiece = newPiece.playingAs === 'white'
+
+    const { row } = newPiece.position
+
+    const isReadyToPromote = isNewPieceAPawn && (isAWhitePiece ? row === 7 : row === 0)
+
+    if (isReadyToPromote) {
+      setOpenPawnPromotion(true)
+      setPromotedPawnCell({ ...newPiece })
+    }
+  }
+
+  const handlePawnPromotion = (selectedPiece: Exclude<Pieces, 'pawn' | 'king'>) => {
+    if (promotedPawnCell) {
+      const {
+        position: { row, column },
+        playingAs,
+      } = promotedPawnCell
+
+      const newPiece: BoardCell = {
+        element: handleGetPieceComponent(selectedPiece, { row, column }),
+        position: { row, column },
+        playingAs: playingAs,
+        pieceName: selectedPiece,
+      }
+
+      handleSetCell(newPiece)
+
+      setOpenPawnPromotion(false)
+      setPromotedPawnCell(null)
     }
   }
 
@@ -137,6 +190,12 @@ export const BoardProvider = ({ children }: { children: JSX.Element }): JSX.Elem
         temporaryIndexes,
         eraseTemporaryIndexes,
         handleMovePiece,
+
+        openPawnPromotion,
+        setOpenPawnPromotion,
+        handleClosePawnPromotion,
+
+        handlePawnPromotion,
       }}
     >
       {children}
