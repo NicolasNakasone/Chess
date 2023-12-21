@@ -16,6 +16,8 @@ export const King = (position: Position): JSX.Element => {
   const { board, currentPiece, handleCurrentPiece, handleGetCell, handleTemporaryCells } =
     useContext(BoardContext)
 
+  const color = board[position.row][position.column]?.playingAs || 'white'
+
   const onConfirmMove = () => {
     const cellContent = handleGetCell(position)
     handleCurrentPiece(cellContent)
@@ -43,12 +45,14 @@ export const King = (position: Position): JSX.Element => {
     }
   }
 
-  return <KingSVG onClick={onConfirmMove} />
+  return <KingSVG color={color} onClick={onConfirmMove} />
 }
 
 export const Queen = (position: Position): JSX.Element => {
   const { board, currentPiece, handleCurrentPiece, handleGetCell, handleTemporaryCells } =
     useContext(BoardContext)
+
+  const color = board[position.row][position.column]?.playingAs || 'white'
 
   const onConfirmMove = () => {
     const cellContent = handleGetCell(position)
@@ -77,12 +81,14 @@ export const Queen = (position: Position): JSX.Element => {
     }
   }
 
-  return <QueenSVG onClick={onConfirmMove} />
+  return <QueenSVG color={color} onClick={onConfirmMove} />
 }
 
 export const Rook = (position: Position): JSX.Element => {
   const { board, currentPiece, handleCurrentPiece, handleGetCell, handleTemporaryCells } =
     useContext(BoardContext)
+
+  const color = board[position.row][position.column]?.playingAs || 'white'
 
   const onConfirmMove = () => {
     const cellContent = handleGetCell(position)
@@ -111,12 +117,14 @@ export const Rook = (position: Position): JSX.Element => {
     }
   }
 
-  return <RookSVG onClick={onConfirmMove} />
+  return <RookSVG color={color} onClick={onConfirmMove} />
 }
 
 export const Bishop = (position: Position): JSX.Element => {
   const { board, currentPiece, handleCurrentPiece, handleGetCell, handleTemporaryCells } =
     useContext(BoardContext)
+
+  const color = board[position.row][position.column]?.playingAs || 'white'
 
   const onConfirmMove = () => {
     const cellContent = handleGetCell(position)
@@ -145,12 +153,14 @@ export const Bishop = (position: Position): JSX.Element => {
     }
   }
 
-  return <BishopSVG onClick={onConfirmMove} />
+  return <BishopSVG color={color} onClick={onConfirmMove} />
 }
 
 export const Knight = (position: Position): JSX.Element => {
   const { board, currentPiece, handleCurrentPiece, handleGetCell, handleTemporaryCells } =
     useContext(BoardContext)
+
+  const color = board[position.row][position.column]?.playingAs || 'white'
 
   const onConfirmMove = () => {
     const cellContent = handleGetCell(position)
@@ -179,12 +189,14 @@ export const Knight = (position: Position): JSX.Element => {
     }
   }
 
-  return <KnightSVG onClick={onConfirmMove} />
+  return <KnightSVG color={color} onClick={onConfirmMove} />
 }
 
 export const Pawn = (position: Position): JSX.Element => {
   const { board, currentPiece, handleCurrentPiece, handleGetCell, handleTemporaryCells } =
     useContext(BoardContext)
+
+  const color = board[position.row][position.column]?.playingAs || 'white'
 
   const onConfirmMove = () => {
     const cellContent = handleGetCell(position)
@@ -213,7 +225,7 @@ export const Pawn = (position: Position): JSX.Element => {
     }
   }
 
-  return <PawnSVG onClick={onConfirmMove} />
+  return <PawnSVG color={color} onClick={onConfirmMove} />
 }
 
 type Piece = {
