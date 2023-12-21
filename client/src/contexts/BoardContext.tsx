@@ -22,6 +22,11 @@ export interface BoardCell {
   element: JSX.Element | null
 }
 
+export interface PromotedPawnKeys {
+  pawnCell: BoardCell
+  openDialog: boolean
+}
+
 export type Board = (null | BoardCell)[][]
 export type TemporaryCells = TemporaryCell[]
 
@@ -41,8 +46,7 @@ interface BoardContextProps {
   eraseTemporaryIndexes: () => void
   handleMovePiece: (position: Position) => void
 
-  openPawnPromotion: boolean
-  setOpenPawnPromotion: (value: SetStateAction<boolean>) => void
+  promotedPawnKeys: PromotedPawnKeys | null
   handleClosePawnPromotion: () => void
 
   handlePawnPromotion: (selectedPiece: Exclude<Pieces, 'pawn' | 'king'>) => void
@@ -63,8 +67,8 @@ export const BoardContext = createContext<BoardContextProps>({
   eraseTemporaryIndexes: () => null,
   handleMovePiece: () => null,
 
-  openPawnPromotion: false,
-  setOpenPawnPromotion: () => null,
+  promotedPawnKeys: null,
   handleClosePawnPromotion: () => null,
+
   handlePawnPromotion: () => null,
 })

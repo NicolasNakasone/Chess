@@ -44,13 +44,8 @@ import 'src/App.css'
 */
 
 export const App = () => {
-  const {
-    board,
-    handleClosePawnPromotion,
-    handlePawnPromotion,
-    handleSetCell,
-    openPawnPromotion,
-  } = useContext(BoardContext)
+  const { board, handleClosePawnPromotion, handlePawnPromotion, handleSetCell, promotedPawnKeys } =
+    useContext(BoardContext)
 
   // A fines de probar se setea de esta forma, mas adelante se deberia ver la manera de setear un tablero entero
   useEffect(() => {
@@ -132,7 +127,7 @@ export const App = () => {
         })}
       </div>
       <Dialog
-        open={openPawnPromotion}
+        open={promotedPawnKeys?.openDialog || false}
         alwaysOpen
         style={{
           backgroundColor: '#DDDDDD',
@@ -142,10 +137,22 @@ export const App = () => {
         <div>
           <p>Coronación de peón</p>
           <div>
-            <QueenSVG onClick={() => handlePawnPromotion('queen')} />
-            <RookSVG onClick={() => handlePawnPromotion('rook')} />
-            <BishopSVG onClick={() => handlePawnPromotion('bishop')} />
-            <KnightSVG onClick={() => handlePawnPromotion('knight')} />
+            <QueenSVG
+              color={promotedPawnKeys?.pawnCell.playingAs || 'white'}
+              onClick={() => handlePawnPromotion('queen')}
+            />
+            <RookSVG
+              color={promotedPawnKeys?.pawnCell.playingAs || 'white'}
+              onClick={() => handlePawnPromotion('rook')}
+            />
+            <BishopSVG
+              color={promotedPawnKeys?.pawnCell.playingAs || 'white'}
+              onClick={() => handlePawnPromotion('bishop')}
+            />
+            <KnightSVG
+              color={promotedPawnKeys?.pawnCell.playingAs || 'white'}
+              onClick={() => handlePawnPromotion('knight')}
+            />
           </div>
         </div>
       </Dialog>
