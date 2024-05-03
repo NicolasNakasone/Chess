@@ -22,6 +22,42 @@ export interface BoardCell {
   element: JSX.Element | null
 }
 
+/* 
+  {
+    attackedPosition: Position
+    attackedElement: JSX.Element
+    attackedColor: 'white' | 'black'
+
+    position: Position
+    // element: JSX.Element | null    Tal vez esto no es necesario
+  }
+
+  02/01/24 14:06 - En efecto, probar con este approach. Hacer una CaptureCell
+                   reemplazando una celda que este ocupada por una pieza
+                   rival a la que esta por mover (la idea es reemplazar una
+                   BoardCell con una CaptureCell)   
+*/
+
+/* 
+  Basicamente lo que habria que hacer es:
+  1- Usar o reutilizar los mismos handlers para chequear nuevos movimientos
+     para chequear si la celda que se esta revisando esta ocupada o no, y
+     en base a eso agregar un elemento al array de posibles movimientos
+     (como sucede con las TemporaryCell, pero para las CaptureCell).
+    
+     Si creo que deberian ser handlers por aparte ya que estaria bueno en
+     el componente donde se use, tener un handler para cada tipo de celda,
+     asi es mas sencillo el manejo o generacion de celdas temporales o de
+     captura.
+     Otro approach que se puede hacer sino, es seguir usando las mismas
+     funciones para chequear movimientos en una direccion, pero lo que 
+     retornan podria ser ahora un objeto, que contenga el array de arrays
+     de 2 numeros, pero ademas un string por cada par de numeros, para
+     indicar si este corresponde a una celda temporal o de captura.
+     De ultima, otra cosa que se puede hacer, es retornar 2 arrays, pero
+     que uno sea para celdas temporales, y otro para celdas de captura.
+*/
+
 export interface PromotedPawnKeys {
   pawnCell: BoardCell
   openDialog: boolean

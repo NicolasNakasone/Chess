@@ -86,14 +86,14 @@ export const App = () => {
       pieceName: 'knight',
     })
     handleSetCell({
-      element: <Pawn {...{ row: 6, column: 5 }} />,
-      position: { row: 6, column: 5 },
+      element: <Pawn {...{ row: 4, column: 5 }} />,
+      position: { row: 4, column: 5 },
       playingAs: 'black',
       pieceName: 'pawn',
     })
     handleSetCell({
-      element: <Pawn {...{ row: 1, column: 6 }} />,
-      position: { row: 1, column: 6 },
+      element: <Pawn {...{ row: 2, column: 6 }} />,
+      position: { row: 2, column: 6 },
       playingAs: 'white',
       pieceName: 'pawn',
     })

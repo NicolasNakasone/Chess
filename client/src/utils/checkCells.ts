@@ -18,7 +18,16 @@ const isCellEmpty = (board: Board, { row, column }: Position) => {
 }
 
 const checkCellContent = (board: Board, { row, column }: Position) => {
+  const playingAs = board[row][column]?.playingAs === 'white'
+
   return !itIsOffTheBoard(board, { row, column }) && !isCellEmpty(board, { row, column })
+}
+
+const checkForCapture = (board: Board, position: Position, rivalPosition: Position) => {
+  return (
+    board[position.row][position.column]?.playingAs !==
+    board[rivalPosition.row][rivalPosition.column]?.playingAs
+  )
 }
 
 export const check8WayCells = (board: Board, { row, column }: Position): ValidMoves => {
@@ -246,6 +255,12 @@ export const checkOneCellForward = (board: Board, { row, column }: Position): Va
 
   checkCellContent(board, { row: calculatedRow, column }) &&
     pawnMoves.push([calculatedRow, column])
+
+  // Posible captura
+  checkCellContent(board, { row: calculatedRow, column: column - 1 }) &&
+    pawnMoves.push([calculatedRow, column - 1])
+  checkCellContent(board, { row: calculatedRow, column: column + 1 }) &&
+    pawnMoves.push([calculatedRow, column + 1])
 
   return pawnMoves
 }
